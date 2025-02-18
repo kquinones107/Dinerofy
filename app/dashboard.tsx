@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Image, TouchableOpacity } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
+import { router } from 'expo-router';
 
 const transactions = [
   { id: '1', title: 'Fauget Cafe', date: 'May 4th, 2024', type: 'Payment', status: 'Success' },
@@ -12,11 +13,13 @@ const transactions = [
 ];
 
 export default function DashboardScreen() {
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome back</Text>
-        <Text style={styles.username}>Alfredo Torres</Text>
+        <Text style={styles.username}>Kevin Quiñones</Text>
         <Image source={{ uri: 'https://example.com/user.png' }} style={styles.profileImage} />
       </View>
       
@@ -28,7 +31,8 @@ export default function DashboardScreen() {
       </View>
       
       <View style={styles.actionsRow}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton}
+         onPress={() => router.push('/transfer')}>
           <Text style={styles.actionText}>Transfer</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton}>
