@@ -28,7 +28,7 @@ export default function LoginScreen() {
         placeholderTextColor={COLORS.gray}
         secureTextEntry
       />
-      <CustomButton title="Iniciar Sesión" onPress={() => {}} style={styles.button} />
+      <CustomButton title="Iniciar Sesión" onPress={() => router.push('/dashboard')} style={styles.button} />
       <TouchableOpacity>
         <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
