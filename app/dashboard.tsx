@@ -35,7 +35,8 @@ export default function DashboardScreen() {
          onPress={() => router.push('/transfer')}>
           <Text style={styles.actionText}>Transfer</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton}
+         onPress={() => router.push('/request')}>
           <Text style={styles.actionText}>Request</Text>
         </TouchableOpacity>
       </View>
