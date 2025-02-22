@@ -15,12 +15,14 @@ export default function NotificationScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
       <Ionicons name="arrow-back" size={24} color={COLORS.white} style={{ marginBottom: 20 }} />
       </TouchableOpacity>
       
       <Text style={styles.title}>Notifications</Text>
-      
+      </View>
+
       <FlatList
         data={notifications}
         keyExtractor={(item) => item.id}
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
     color: COLORS.accent,
     fontWeight: 'bold',
     marginBottom: 20,
+    marginRight: 130,
   },
   notificationItem: {
     backgroundColor: COLORS.white,
