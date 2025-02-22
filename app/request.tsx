@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
-import { push } from 'expo-router/build/global-state/routing';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
