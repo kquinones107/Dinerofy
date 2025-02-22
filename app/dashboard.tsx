@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, FlatList, TextInput, Image, TouchableOpacity } 
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const transactions = [
   { id: '1', title: 'Fauget Cafe', date: 'May 4th, 2024', type: 'Payment', status: 'Success' },
@@ -21,6 +24,9 @@ export default function DashboardScreen() {
         <Text style={styles.welcomeText}>Welcome back</Text>
         <Text style={styles.username}>Kevin Quiñones</Text>
         <Image source={{ uri: 'https://example.com/user.png' }} style={styles.profileImage} />
+        <TouchableOpacity onPress={() => router.push('/menu')}>
+          <Ionicons name="menu" size={24} color={COLORS.white} />
+        </TouchableOpacity>
       </View>
       
       <View style={styles.balanceCard}>
@@ -33,11 +39,11 @@ export default function DashboardScreen() {
       <View style={styles.actionsRow}>
         <TouchableOpacity style={styles.actionButton}
          onPress={() => router.push('/transfer')}>
-          <Text style={styles.actionText}>Transfer</Text>
+          <FontAwesome6 style={styles.actionButton} name="money-bill-transfer" size={24} color={COLORS.white} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton}
          onPress={() => router.push('/request')}>
-          <Text style={styles.actionText}>Request</Text>
+          <MaterialIcons style={styles.actionButton} name="request-page" size={24} color={COLORS.white} />
         </TouchableOpacity>
       </View>
       
