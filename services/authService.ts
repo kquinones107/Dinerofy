@@ -1,8 +1,9 @@
-import { auth } from "../config/firebaseConfig";
+import { auth, db } from "../config/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 // Función para registrar usuarios
-export const registerUser = async (email: string, password: string) => {
+export const registerUser = async (email: string, password: string, fullName: string, phone: number) => {
   if (!email || !password) {
     throw new Error("El correo y la contraseña son obligatorios");
   }
@@ -11,7 +12,19 @@ export const registerUser = async (email: string, password: string) => {
   }
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
+    const user = userCredential.user;
+
+    // Crear el documento del usuario en la colección "users"
+    await setDoc(doc(db, "users", user.uid), {
+      email,  
+      fullName,
+      phone,
+      balance: 5000,
+      createdAt: serverTimestamp(),
+    });
+
+    return user;
+
   } catch (error) {
     throw error;
   }

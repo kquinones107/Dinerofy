@@ -6,9 +6,9 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { registerUser } from '@/services/authService';
 
-const handleRegister = async (email: string, password: string) => {
+const handleRegister = async (email: string, password: string, fullName: string, phone: number) => {
   try {
-    const user = await registerUser(email, password);
+    const user = await registerUser(email, password, fullName, phone);
     alert('Usuario registrado correctamente');
     router.push('/dashboard');
   } catch (error) {
@@ -19,6 +19,8 @@ const handleRegister = async (email: string, password: string) => {
 export default function RegisterScreen() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [fullName, setFullName] = React.useState('');
+  const [phone, setPhone] = React.useState(0);
 
   return (
     <View style={styles.container}>
@@ -32,6 +34,14 @@ export default function RegisterScreen() {
         style={styles.input}
         placeholder="Nombre Completo"
         placeholderTextColor={COLORS.gray}
+        onChangeText={setFullName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Número de Teléfono"
+        placeholderTextColor={COLORS.gray}
+        keyboardType="phone-pad"
+        onChangeText={(text) => setPhone(Number(text))}
       />
       <TextInput
         style={styles.input}
@@ -54,7 +64,7 @@ export default function RegisterScreen() {
         secureTextEntry
       />
       
-      <CustomButton title="Registrarse" onPress={() => handleRegister(email, password)} style={styles.button} />
+      <CustomButton title="Registrarse" onPress={() => handleRegister(email, password, fullName, phone)} style={styles.button} />
     </View>
   );
 }

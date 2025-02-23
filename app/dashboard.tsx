@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Image, TouchableOpacity } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
@@ -6,6 +6,9 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {getUserData} from '@/services/userService';
+import { auth } from '@/config/firebaseConfig';
+import { DocumentData } from 'firebase/firestore';
 
 const transactions = [
   { id: '1', title: 'Fauget Cafe', date: 'May 4th, 2024', type: 'Payment', status: 'Success' },
@@ -15,14 +18,33 @@ const transactions = [
   { id: '5', title: 'Avery Clinic', date: 'April 30th, 2024', type: 'Transfer', status: 'Success' },
 ];
 
+
+
 export default function DashboardScreen() {
+
+  const [userData, setUserData] = React.useState<DocumentData | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (auth.currentUser) {
+          const user = await getUserData(auth.currentUser.uid);
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error("Error obteniendo datos",error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
 
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome back</Text>
-        <Text style={styles.username}>Kevin Quiñones</Text>
+        <Text style={styles.username}>{userData?.fullName}</Text>
         <Image source={{ uri: 'https://example.com/user.png' }} style={styles.profileImage} />
         <TouchableOpacity onPress={() => router.push('/menu')}>
           <Ionicons name="menu" size={24} color={COLORS.white} />
@@ -30,7 +52,7 @@ export default function DashboardScreen() {
       </View>
       
       <View style={styles.balanceCard}>
-        <Text style={styles.balanceAmount}>$5,500.50</Text>
+        <Text style={styles.balanceAmount}>${userData?.balance}</Text>
         <Text style={styles.balanceLabel}>Balance</Text>
         <Text style={styles.cardInfo}>**** 123-456-7890</Text>
         <Text style={styles.bankName}>Fauget Bank Credit Card</Text>
