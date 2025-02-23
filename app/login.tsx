@@ -2,12 +2,24 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
+import { loginUser } from '@/services/authService';
 
+const handleLogin = async (email: string, password: string) => {
+  try {
+    const user = await loginUser(email, password);
+    alert('Inicio de sesión correcto');
+    router.push('/dashboard');
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export default function LoginScreen() {
  
   const router = useRouter();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   return (
     <View style={styles.container}>
@@ -21,14 +33,16 @@ export default function LoginScreen() {
         placeholder="Correo Electrónico"
         placeholderTextColor={COLORS.gray}
         keyboardType="email-address"
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
         placeholderTextColor={COLORS.gray}
         secureTextEntry
+        onChangeText={setPassword}
       />
-      <CustomButton title="Iniciar Sesión" onPress={() => router.push('/dashboard')} style={styles.button} />
+      <CustomButton title="Iniciar Sesión" onPress={() => handleLogin(email, password)} style={styles.button} />
       <TouchableOpacity>
         <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>

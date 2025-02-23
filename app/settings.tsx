@@ -3,9 +3,20 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import COLORS from '../components/theme';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { logoutUser } from '@/services/authService';
 
+const handleLogout = async () => {
+  try {
+    await logoutUser();
+    alert('Sesión cerrada correctamente');
+    router.push('/login');
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export default function SettingsScreen() {
+  
   
 
   return (
@@ -34,7 +45,7 @@ export default function SettingsScreen() {
         <Text style={styles.menuText}>💬 Centro de Ayuda</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>🚪 Cerrar Sesión</Text>
       </TouchableOpacity>
     </View>
