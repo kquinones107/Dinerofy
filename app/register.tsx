@@ -2,8 +2,24 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { registerUser } from '@/services/authService';
+
+const handleRegister = async (email: string, password: string) => {
+  try {
+    const user = await registerUser(email, password);
+    alert('Usuario registrado correctamente');
+    router.push('/dashboard');
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export default function RegisterScreen() {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
   return (
     <View style={styles.container}>
       <Image 
@@ -22,12 +38,14 @@ export default function RegisterScreen() {
         placeholder="Correo Electrónico"
         placeholderTextColor={COLORS.gray}
         keyboardType="email-address"
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
         placeholderTextColor={COLORS.gray}
         secureTextEntry
+        onChangeText={setPassword}
       />
       <TextInput
         style={styles.input}
@@ -36,7 +54,7 @@ export default function RegisterScreen() {
         secureTextEntry
       />
       
-      <CustomButton title="Registrarse" onPress={() => {}} style={styles.button} />
+      <CustomButton title="Registrarse" onPress={() => handleRegister(email, password)} style={styles.button} />
     </View>
   );
 }
