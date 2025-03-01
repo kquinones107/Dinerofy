@@ -10,17 +10,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const handleTransfer = async (receiverEmail: string, amount: number) => {
   try {
-    if (!auth.currentUser) {
-      alert("Usuario no autenticado");
-      return;
-    }
+    // if (!auth.currentUser) {
+    //   alert("Usuario no autenticado");
+    //   return;
+    // }
 
     if (!receiverEmail || amount <= 0) {
       alert("Ingrese un destinatario y un monto válido");
       return;
     }
 
-    await sendMoney(auth.currentUser.uid, receiverEmail, amount);
+    await sendMoney('jzapatamo@unal.edu.co', receiverEmail, amount);
     alert("Transferencia exitosa");
     router.push("/dashboard");
   } catch (error) {

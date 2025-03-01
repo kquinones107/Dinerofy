@@ -1,18 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import COLORS from '../components/theme';
 import { router, useRouter } from 'expo-router'; 
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getNotifications } from '../services/notificationService';
+import { DocumentData } from 'firebase/firestore';
 
-const notifications = [
-  { id: '1', message: 'Has recibido una transferencia de $500', date: 'May 5, 2024' },
-  { id: '2', message: 'Tu pago en Fauget Cafe fue exitoso', date: 'May 4, 2024' },
-  { id: '3', message: 'Tu transferencia a Claudia Alves ha fallado', date: 'May 3, 2024' },
-  { id: '4', message: 'Se ha actualizado tu información de seguridad', date: 'May 2, 2024' },
-];
 
 export default function NotificationScreen() {
+
+  const [notifications, setNotifications] = React.useState<DocumentData>([]);
+
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp * 1000); // Convertir segundos a milisegundos
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }); // Formato dd/mm/yyyy según el locale
+  };
+
+
+
+  const getUserNotifications = async () => {
+    const userNotifications = await getNotifications('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
+    setNotifications(userNotifications.data);
+  }
+
+  useEffect(() => {
+    getUserNotifications();
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,7 +44,7 @@ export default function NotificationScreen() {
         renderItem={({ item }) => (
           <View style={styles.notificationItem}>
             <Text style={styles.message}>{item.message}</Text>
-            <Text style={styles.date}>{item.date}</Text>
+            <Text style={styles.date}>{formatTimestamp(item.createdAt.seconds)}</Text>
           </View>
         )}
       />

@@ -10,35 +10,45 @@ import {getUserData} from '@/services/userService';
 import { auth } from '@/config/firebaseConfig';
 import { DocumentData } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const transactions = [
-  { id: '1', title: 'Fauget Cafe', date: 'May 4th, 2024', type: 'Payment', status: 'Success' },
-  { id: '2', title: 'Larana, Inc.', date: 'May 3rd, 2024', type: 'Payment', status: 'Success' },
-  { id: '3', title: 'Claudia Alves', date: 'May 2nd, 2024', type: 'Transfer', status: 'Failed' },
-  { id: '4', title: 'Borcelle Cafe', date: 'May 1st, 2024', type: 'Payment', status: 'Success' },
-  { id: '5', title: 'Avery Clinic', date: 'April 30th, 2024', type: 'Transfer', status: 'Success' },
-];
+import { getTransactions } from '../services/transactionService';
 
 
 
 export default function DashboardScreen() {
 
   const [userData, setUserData] = React.useState<DocumentData | null>(null);
+  const [transactions, setTransactions] = React.useState<DocumentData>([]);
+
+
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        if (auth.currentUser) {
-          const user = await getUserData(auth.currentUser.uid);
+        // if (auth.currentUser) {
+          const user = await getUserData('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
           setUserData(user);
-        }
+        // }
       } catch (error) {
         console.error("Error obteniendo datos",error);
       }
     };
+
+    const getUserTransactions = async () => {
+      const userTransactions = await getTransactions('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
+      setTransactions(userTransactions.data);
+    } 
   
-    fetchUserData();
+    (async () => {
+      await fetchUserData();
+      await getUserTransactions();
+    })();
+   
   }, []);
+
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp * 1000); // Convertir segundos a milisegundos
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }); // Formato dd/mm/yyyy según el locale
+  };
 
 
   return (
@@ -79,11 +89,11 @@ export default function DashboardScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.transactionItem}>
-            <Text style={styles.transactionText}>{item.title}</Text>
-            <Text style={styles.transactionDate}>{item.date}</Text>
-            <Text style={styles.transactionType}>{item.type}</Text>
-            <Text style={[styles.transactionStatus, item.status === 'Success' ? styles.success : styles.failed]}>
-              {item.status}
+            <Text style={styles.transactionText} numberOfLines={1}>{item.receiverEmail}</Text>
+            <Text style={styles.transactionDate}>{formatTimestamp(item.timestamp.seconds)}</Text>
+            <Text style={styles.transactionType}>Payment</Text>
+            <Text style={[styles.transactionStatus, styles.success]}>
+              Success
             </Text>
           </View>
         )}
@@ -173,9 +183,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: COLORS.white,
     marginBottom: 10,
+    gap: 10
   },
   transactionText: {
     fontSize: 16,
+
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    maxWidth: 100
   },
   transactionDate: {
     fontSize: 14,
