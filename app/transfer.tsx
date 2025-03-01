@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
-import { push } from 'expo-router/build/global-state/routing';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { sendMoney } from '@/services/transactionService';
+import { auth } from '@/config/firebaseConfig';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const handleTransfer = async (receiverEmail: string, amount: number) => {
+  try {
+    if (!auth.currentUser) {
+      alert("Usuario no autenticado");
+      return;
+    }
+
+    if (!receiverEmail || amount <= 0) {
+      alert("Ingrese un destinatario y un monto válido");
+      return;
+    }
+
+    await sendMoney(auth.currentUser.uid, receiverEmail, amount);
+    alert("Transferencia exitosa");
+    router.push("/dashboard");
+  } catch (error) {
+    console.error("Error en la transferencia:", (error as any).message);
+    alert("Error en la transferencia: " + (error as any).message);
+  }
+};
+
 
 export default function TransferScreen() {
+  const [receiverEmail, setReceiverEmail] = useState('');
+  const [amount, setAmount] = useState(0);
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <TouchableOpacity onPress={() => router.back()}>
       <Ionicons name="arrow-back" size={24} color={COLORS.white} style={{ marginBottom: 20 }} />
@@ -21,6 +48,7 @@ export default function TransferScreen() {
         style={styles.input}
         placeholder="Nombre o número de cuenta"
         placeholderTextColor={COLORS.gray}
+        onChangeText={setReceiverEmail}
       />
       
       <Text style={styles.label}>Cantidad</Text>
@@ -29,6 +57,7 @@ export default function TransferScreen() {
         placeholder="$0.00"
         placeholderTextColor={COLORS.gray}
         keyboardType="numeric"
+        onChangeText={(text) => setAmount(parseFloat(text) || 0)}
       />
       
       <Text style={styles.label}>Nota (Opcional)</Text>
@@ -39,8 +68,9 @@ export default function TransferScreen() {
         multiline
       />
       
-      <CustomButton title="Enviar" onPress={() => {}} style={styles.button} />
-    </View>
+      <CustomButton title="Enviar" onPress={() => handleTransfer(receiverEmail, amount)} style={styles.button} />
+        
+    </SafeAreaView>
   );
 }
 
