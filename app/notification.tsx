@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import COLORS from '../components/theme';
 import { router, useRouter } from 'expo-router'; 
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const notifications = [
   { id: '1', message: 'Has recibido una transferencia de $500', date: 'May 5, 2024' },
@@ -14,7 +15,7 @@ const notifications = [
 export default function NotificationScreen() {
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
       <Ionicons name="arrow-back" size={24} color={COLORS.white} style={{ marginBottom: 20 }} />
@@ -33,7 +34,7 @@ export default function NotificationScreen() {
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

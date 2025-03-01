@@ -4,6 +4,7 @@ import COLORS from '../components/theme';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { logoutUser } from '@/services/authService';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const handleLogout = async () => {
   try {
@@ -20,7 +21,7 @@ export default function SettingsScreen() {
   
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color={COLORS.white} style={{ marginBottom: 20 }} />
@@ -48,7 +49,7 @@ export default function SettingsScreen() {
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>🚪 Cerrar Sesión</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

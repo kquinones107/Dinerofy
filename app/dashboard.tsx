@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
 import { router } from 'expo-router';
@@ -9,6 +9,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {getUserData} from '@/services/userService';
 import { auth } from '@/config/firebaseConfig';
 import { DocumentData } from 'firebase/firestore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const transactions = [
   { id: '1', title: 'Fauget Cafe', date: 'May 4th, 2024', type: 'Payment', status: 'Success' },
@@ -41,7 +42,7 @@ export default function DashboardScreen() {
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome back</Text>
         <Text style={styles.username}>{userData?.fullName}</Text>
@@ -87,7 +88,7 @@ export default function DashboardScreen() {
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
