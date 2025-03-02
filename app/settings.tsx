@@ -1,22 +1,35 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import COLORS from '../components/theme';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { logoutUser } from '@/services/authService';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from "expo-router";
 
-const handleLogout = async () => {
-  try {
-    await logoutUser();
-    alert('Sesión cerrada correctamente');
-    router.push('/login');
-  } catch (error) {
-    console.error(error);
-  }
-};
+
+
+
 
 export default function SettingsScreen() {
+
+  const authContext = useAuth();
+  const logout = authContext?.logout;
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      if (logout) {
+        await logout();
+      } else {
+        Alert.alert("Error", "No se pudo cerrar sesión.");
+      }
+      router.replace("/login");
+    } catch (error) {
+      Alert.alert("Error", "No se pudo cerrar sesión.");
+    }
+  };
   
   
 
@@ -30,19 +43,19 @@ export default function SettingsScreen() {
       <Text style={styles.title}>Configuración</Text>
       </View>
 
-      <TouchableOpacity style={styles.menuItem}>
+      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/editProfile')}>
         <Text style={styles.menuText}>👤 Editar Perfil</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.menuItem}>
+      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/security')}>
         <Text style={styles.menuText}>🔒 Seguridad</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.menuItem}>
+      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/userInfo')}>
         <Text style={styles.menuText}>👤 Mi Información</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.menuItem}>
+      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/helpCenter')}>
         <Text style={styles.menuText}>💬 Centro de Ayuda</Text>
       </TouchableOpacity>
       

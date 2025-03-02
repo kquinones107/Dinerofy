@@ -1,25 +1,33 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import COLORS from '../components/theme';
 import { CustomButton } from '../components/CustomButton';
 import { router, useRouter } from 'expo-router';
 import { loginUser } from '@/services/authService';
+import { useAuth } from '@/contexts/AuthContext';
 
-const handleLogin = async (email: string, password: string) => {
-  try {
-    const user = await loginUser(email, password);
-    alert('Inicio de sesión correcto');
-    router.push('/dashboard');
-  } catch (error) {
-    console.error(error);
-  }
-}
+
 
 export default function LoginScreen() {
- 
+
+  const authContext = useAuth();
+  const login = authContext ? authContext.login : null;
   const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  const handleLogin = async () => {
+    try {
+      if (login) {
+        await login(email, password);
+      } else {
+        Alert.alert("Error", "El servicio de autenticación no está disponible");
+      }
+      router.replace("/dashboard");
+    } catch (error) {
+      Alert.alert("Error", "Correo o contraseña incorrectos");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -42,7 +50,7 @@ export default function LoginScreen() {
         secureTextEntry
         onChangeText={setPassword}
       />
-      <CustomButton title="Iniciar Sesión" onPress={() => handleLogin(email, password)} style={styles.button} />
+      <CustomButton title="Iniciar Sesión" onPress={handleLogin} style={styles.button} />
       <TouchableOpacity>
         <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>

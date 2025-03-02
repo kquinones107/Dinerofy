@@ -12,7 +12,9 @@ export default function Index() {
 
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);	
+
+  
+  {/*const [loading, setLoading] = useState(false);	
 
   useEffect(() => {
     const checkStatus = async () => {
@@ -35,7 +37,7 @@ export default function Index() {
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
-  }
+  }*/}
 
   const onboardingData = [
     {
