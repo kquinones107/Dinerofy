@@ -1,15 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, ImageBackground, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import COLORS from '../components/theme';
 import { CustomButton } from "@/components/CustomButton";
+import { auth } from "@/config/firebaseConfig";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function Index() {
 
   const router = useRouter();
-
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(false);	
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      const user = auth.currentUser;
+      const onboardingCompleted = await AsyncStorage.getItem("onboardingCompleted");
+
+      if (user) {
+        router.replace('/dashboard');
+      } else if (onboardingCompleted === "true") {
+        router.replace('/login');
+      }
+      setLoading(false);
+    };
+    checkStatus();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
 
   const onboardingData = [
     {
@@ -123,5 +149,10 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20,
     paddingHorizontal: 80,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
