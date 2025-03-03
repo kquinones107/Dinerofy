@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getNotifications } from '../services/notificationService';
 import { DocumentData } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function NotificationScreen() {
@@ -20,6 +21,7 @@ export default function NotificationScreen() {
 
 
   const getUserNotifications = async () => {
+    console.log('user =>', AsyncStorage.getItem('user'));
     const userNotifications = await getNotifications('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
     setNotifications(userNotifications.data);
   }
