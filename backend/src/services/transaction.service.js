@@ -2,6 +2,12 @@ import { db } from "../config/firebase.js";
 import { doc, getDoc, serverTimestamp, updateDoc, addDoc, getDocs, collection, query, where } from "firebase/firestore";
 
 export const send = async (senderEmail, receiverEmail, amount, note) => {
+    console.log({
+        senderEmail,
+        receiverEmail,
+        amount,
+        note
+    })
     try {
         if (amount <= 0) throw new Error("El monto debe ser mayor a cero");
         const usersCollection = collection(db, "users");
@@ -47,6 +53,7 @@ export const send = async (senderEmail, receiverEmail, amount, note) => {
 
         return { message: "Transferencia realizada con éxito" };
     } catch (error) {
+        console.log(error)
         throw error;
     }
 };

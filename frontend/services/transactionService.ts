@@ -1,10 +1,11 @@
 import axios from "axios";
 
-export const sendMoney = async (from?: string, to?: string, amount?: number) => {
+export const sendMoney = async (from?: string, to?: string, amount?: number, note?: string) => {
     return axios.post('http://192.168.1.4:5000/api/transfer', {
-        senderId: from,
-        receiverEmail: to,
-        amount
+        from,
+        to,
+        amount,
+        note
       });
 };
 

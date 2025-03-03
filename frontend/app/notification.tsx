@@ -21,9 +21,12 @@ export default function NotificationScreen() {
 
 
   const getUserNotifications = async () => {
-    console.log('user =>', AsyncStorage.getItem('user'));
-    const userNotifications = await getNotifications('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
-    setNotifications(userNotifications.data);
+    const userStr = await AsyncStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      const userNotifications = await getNotifications(user.uid);
+      setNotifications(userNotifications.data);
+    }
   }
 
   useEffect(() => {

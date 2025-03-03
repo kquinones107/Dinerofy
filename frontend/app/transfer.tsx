@@ -7,25 +7,26 @@ import { Ionicons } from '@expo/vector-icons';
 import { sendMoney } from '@/services/transactionService';
 import { auth } from '@/config/firebaseConfig';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const handleTransfer = async (receiverEmail: string, amount: number) => {
+const handleTransfer = async (receiverEmail: string, amount: number, note: string) => {
   try {
-    // if (!auth.currentUser) {
-    //   alert("Usuario no autenticado");
-    //   return;
-    // }
 
     if (!receiverEmail || amount <= 0) {
       alert("Ingrese un destinatario y un monto válido");
       return;
     }
 
-    await sendMoney('jzapatamo@unal.edu.co', receiverEmail, amount);
-    alert("Transferencia exitosa");
-    router.push("/dashboard");
+    const userStr = await AsyncStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      await sendMoney(user.email, receiverEmail, amount, note);
+      alert("Transferencia exitosa");
+      router.push("/dashboard");
+    }
   } catch (error) {
-    console.error("Error en la transferencia:", (error as any).message);
-    alert("Error en la transferencia: " + (error as any).message);
+    console.error("Error en la transferencia:", (error as any));
+    alert("Error en la transferencia: " + (error as any));
   }
 };
 
@@ -33,6 +34,7 @@ const handleTransfer = async (receiverEmail: string, amount: number) => {
 export default function TransferScreen() {
   const [receiverEmail, setReceiverEmail] = useState('');
   const [amount, setAmount] = useState(0);
+  const [note, setNote] = useState('');
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,10 +67,11 @@ export default function TransferScreen() {
         style={[styles.input, styles.textArea]}
         placeholder="Escribe un mensaje"
         placeholderTextColor={COLORS.gray}
+        onChangeText={(text) => setNote(text)}
         multiline
       />
       
-      <CustomButton title="Enviar" onPress={() => handleTransfer(receiverEmail, amount)} style={styles.button} />
+      <CustomButton title="Enviar" onPress={() => handleTransfer(receiverEmail, amount, note)} style={styles.button} />
         
     </SafeAreaView>
   );

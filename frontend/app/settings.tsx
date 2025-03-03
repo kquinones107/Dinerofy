@@ -47,10 +47,6 @@ export default function SettingsScreen() {
         <Text style={styles.menuText}>👤 Editar Perfil</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/security')}>
-        <Text style={styles.menuText}>🔒 Seguridad</Text>
-      </TouchableOpacity>
-      
       <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/userInfo')}>
         <Text style={styles.menuText}>👤 Mi Información</Text>
       </TouchableOpacity>

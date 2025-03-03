@@ -11,6 +11,7 @@ import { auth } from '@/config/firebaseConfig';
 import { DocumentData } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getTransactions } from '../services/transactionService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -22,25 +23,27 @@ export default function DashboardScreen() {
 
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (id: string) => {
       try {
-        // if (auth.currentUser) {
-          const user = await getUserData('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
-          setUserData(user);
-        // }
+        const user = await getUserData(id);
+        setUserData(user);
       } catch (error) {
         console.error("Error obteniendo datos",error);
       }
     };
 
-    const getUserTransactions = async () => {
-      const userTransactions = await getTransactions('Pt9C1vJRf2N0B1vLK7cVpbjaoda2');
+    const getUserTransactions = async (id: string) => {
+      const userTransactions = await getTransactions(id);
       setTransactions(userTransactions.data);
     } 
   
     (async () => {
-      await fetchUserData();
-      await getUserTransactions();
+      const userStr = await AsyncStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        await fetchUserData(user.uid);
+        await getUserTransactions(user.uid);
+      }
     })();
    
   }, []);
@@ -190,7 +193,8 @@ const styles = StyleSheet.create({
 
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    maxWidth: 100
+    maxWidth: 100,
+    minWidth: 100
   },
   transactionDate: {
     fontSize: 14,

@@ -3,6 +3,7 @@ import { send, getTransactions } from '../services/transaction.service.js'
 
 export const transferMoney = async (req, res) => {
     try {
+        console.log(req.body)
         const response = await send(req.body.from, req.body.to, req.body.amount, req.body.note);
         res.status(200).json(response);
     } catch (error) {

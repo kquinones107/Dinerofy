@@ -14,48 +14,18 @@ export default function Index() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   
-  {/*const [loading, setLoading] = useState(false);	
-
-  useEffect(() => {
-    const checkStatus = async () => {
-      const user = auth.currentUser;
-      const onboardingCompleted = await AsyncStorage.getItem("onboardingCompleted");
-
-      if (user) {
-        router.replace('/dashboard');
-      } else if (onboardingCompleted === "true") {
-        router.replace('/login');
-      }
-      setLoading(false);
-    };
-    checkStatus();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
-  }*/}
 
   const onboardingData = [
     {
       image: require("../assets/images/billeteras-digitales.png"),
-      //title: "Agrega tus tarjetas favoritas",
-      //description: "Tu billetera digital siempre a la mano. Agrega tus tarjetas, realiza pagos sin complicaciones y mantén tus fondos organizados en un solo lugar.",
       buttonLabel: "Siguiente",
     },
     {
       image: require("../assets/images/Imagen_1.png"),
-      //title: "Realiza tus pagos sin contacto",
-      //description: "Paga fácil y sin efectivo. Usa tu billetera digital para realizar pagos rápidos, seguros y sin contacto en cualquier momento",
       buttonLabel: "Siguiente",
     },
     {
       image: require("../assets/images/imagen_2.png"),
-      //title: "Transfiere dinero a tus amigos",
-      //description: "Gestiona tu dinero de forma rápida y segura. Visualiza tu saldo, revisa tu historial de transacciones y mantén el control de tus finanzas en todo momento",
       buttonLabel: "Comenzar",
     },
   ];
@@ -77,8 +47,6 @@ export default function Index() {
   return (
     <ImageBackground source={image} style={styles.container}>
       <View style={styles.content}>
-        {/*<Text style={styles.title}>{title}</Text> */}
-        {/*<Text style={styles.description}>{description}</Text> */}
 
         <View style={styles.indicators}>
           {onboardingData.map((_, index) => (
